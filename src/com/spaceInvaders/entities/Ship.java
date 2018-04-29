@@ -1,16 +1,13 @@
 package com.spaceInvaders.entities;
-import com.spaceInvaders.AssetManager;
 import com.spaceInvaders.GameController;
 import com.spaceInvaders.GameData;
 
 public class Ship extends GameObject implements Shooter<Laser> {
-    
-    private Laser laser;
 
     public Ship() {
         super(GameData.GAME_BOARD_WIDTH / 2 - GameData.SHIP_WIDTH / 2,
                 GameData.GAME_BOARD_HEIGHT - GameData.SHIP_HEIGHT, 
-                GameData.SHIP_WIDTH, GameData.SHIP_HEIGHT, AssetManager.getSprite("ship"));
+                GameData.SHIP_WIDTH, GameData.SHIP_HEIGHT, GameData.getSprite("ship"));
     }
 
     @Override
@@ -34,9 +31,9 @@ public class Ship extends GameObject implements Shooter<Laser> {
                 this.moveX(-10);
             }
         }
-        if(controller.isFirePressed() && !controller.getEntities().contains(laser)) {
-            laser = fire();
-            controller.getEntities().add(laser);
+        if(controller.isFirePressed() && !controller.isLaserOnScreen()) {
+            controller.getEntities().add(this.fire());
+            controller.setLaserOnScreen(true);
         }
     }
 

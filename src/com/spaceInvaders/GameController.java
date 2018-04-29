@@ -20,6 +20,8 @@ public class GameController extends TimerTask implements KeyListener {
     private boolean leftPressed;
     private boolean rightPressed;
     private boolean firePressed;
+    private boolean laserOnScreen;
+    private boolean missileOnScreen;
     private GameState state;
 
     public GameController() {
@@ -59,7 +61,23 @@ public class GameController extends TimerTask implements KeyListener {
     public boolean isFirePressed() {
         return firePressed;
     }
+
+    public boolean isLaserOnScreen() {
+        return laserOnScreen;
+    }
+
+    public void setLaserOnScreen(boolean laserOnScreen) {
+        this.laserOnScreen = laserOnScreen;
+    }
     
+    public boolean isMissileOnScreen() {
+        return missileOnScreen;
+    }
+
+    public void setMissileOnScreen(boolean missileOnScreen) {
+        this.missileOnScreen = missileOnScreen;
+    }
+
     public int getScore() {
         return score;
     }
@@ -106,6 +124,7 @@ public class GameController extends TimerTask implements KeyListener {
     public void alienHit() {
         numAliens--;
         score += 10;
+        laserOnScreen = false;
         if(numAliens == 0) {
             nextLevel();
         }

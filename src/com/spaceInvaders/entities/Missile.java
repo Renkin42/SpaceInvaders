@@ -1,14 +1,13 @@
 package com.spaceInvaders.entities;
 import java.util.List;
 
-import com.spaceInvaders.AssetManager;
 import com.spaceInvaders.GameController;
 import com.spaceInvaders.GameData;
 
 public class Missile extends GameObject {
     
     public Missile(int startX, int startY) {
-        super(startX, startY, GameData.MISSILE_WIDTH, GameData.MISSILE_HEIGHT, AssetManager.getSprite("missile"));
+        super(startX, startY, GameData.MISSILE_WIDTH, GameData.MISSILE_HEIGHT, GameData.getSprite("missile"));
     }
 
     @Override

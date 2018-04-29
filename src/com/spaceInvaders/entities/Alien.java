@@ -1,12 +1,11 @@
 package com.spaceInvaders.entities;
-import com.spaceInvaders.AssetManager;
 import com.spaceInvaders.GameController;
 import com.spaceInvaders.GameData;
 
 public class Alien extends GameObject implements Shooter<Missile> {
 
     public Alien(int startX, int startY) {
-        super(startX, startY, GameData.ALIEN_WIDTH, GameData.ALIEN_HEIGHT, AssetManager.getSprite("alien"));
+        super(startX, startY, GameData.ALIEN_WIDTH, GameData.ALIEN_HEIGHT, GameData.getSprite("alien"));
     }
 
     @Override
