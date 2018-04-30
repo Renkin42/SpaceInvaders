@@ -21,7 +21,7 @@ public final class GameData {
     /** Height of a laser fired by player's ship. */
     public static final int LASER_HEIGHT = 16;
     /** How far a laser moves in a single step. */
-    public static final int LASER_SPEED = 20;
+    public static final int LASER_SPEED = 30;
 
     /** Width of a missile fired by an alien. */
     public static final int MISSILE_WIDTH = 5;
@@ -42,7 +42,7 @@ public final class GameData {
     public static final int LEVEL_POINTS = 100;
 
     /** Width of game area. */
-    public static final int GAME_BOARD_WIDTH = 500;
+    public static final int GAME_BOARD_WIDTH = 600;
     /** Height of game area. */
     public static final int GAME_BOARD_HEIGHT = 600;
 

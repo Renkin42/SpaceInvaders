@@ -1,4 +1,5 @@
 package com.spaceInvaders;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -28,7 +29,7 @@ public class GamePanel extends JPanel {
         timer = new Timer();
         timer.scheduleAtFixedRate(controller, 0, 50);
     }
-    
+
     @Override
     public void addNotify() {
         super.addNotify();
@@ -38,34 +39,37 @@ public class GamePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         g.setColor(Color.DARK_GRAY);
-        g.fillRect(0,  0,  this.getWidth(),  this.getHeight());
-        for (GameObject entity : controller.getEntities()) {
-            entity.drawSprite(g);
-        }
-        
-        if(controller.getGameState() == GameState.PAUSED) {
-            g.setColor(new Color(0, 0, 0, 128));
-            g.fillRect(0,  0, this.getWidth(), this.getHeight());
-            g.setColor(Color.WHITE);
-            g.setFont(titleFont);
-            g.drawString("PAUSED", GameData.GAME_BOARD_WIDTH / 2 - 100, GameData.GAME_BOARD_HEIGHT / 2);
-            g.setFont(subTitleFont);
-            g.drawString("Press Space to continue.", GameData.GAME_BOARD_WIDTH / 2 - 175, GameData.GAME_BOARD_HEIGHT / 2 + 35);
-        }
-        if(controller.getGameState() == GameState.START) {
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
+
+        if (controller.getGameState() == GameState.START) {
             g.setColor(Color.WHITE);
             g.setFont(titleFont);
             g.drawString("SPACE INVADERS!", GameData.GAME_BOARD_WIDTH / 2 - 225, GameData.GAME_BOARD_HEIGHT / 2);
             g.setFont(subTitleFont);
-            g.drawString("Press space to begin", GameData.GAME_BOARD_WIDTH / 2 - 150, GameData.GAME_BOARD_HEIGHT / 2 + 35);
+            g.drawString("Press space to begin", GameData.GAME_BOARD_WIDTH / 2 - 150,
+                    GameData.GAME_BOARD_HEIGHT / 2 + 35);
         } else {
+            for (GameObject entity : controller.getEntities()) {
+                entity.drawSprite(g);
+            }
+
+            if (controller.getGameState() == GameState.PAUSED) {
+                g.setColor(new Color(0, 0, 0, 128));
+                g.fillRect(0, 0, this.getWidth(), this.getHeight());
+                g.setColor(Color.WHITE);
+                g.setFont(titleFont);
+                g.drawString("PAUSED", GameData.GAME_BOARD_WIDTH / 2 - 100, GameData.GAME_BOARD_HEIGHT / 2);
+                g.setFont(subTitleFont);
+                g.drawString("Press Space to continue.", GameData.GAME_BOARD_WIDTH / 2 - 175,
+                        GameData.GAME_BOARD_HEIGHT / 2 + 35);
+            }
             String gameState = String.format("Lives: %d | Level: %02d | Score: %03d", controller.getLives(),
                     controller.getLevel(), controller.getScore());
             g.setColor(Color.WHITE);
             g.setFont(dataFont);
-            g.drawString(gameState, 50, 20);
+            g.drawString(gameState, GameData.GAME_BOARD_WIDTH / 2 - 225, 20);
         }
-        
+
     }
 
 }
