@@ -1,4 +1,5 @@
 package com.spaceInvaders.entities;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.spaceInvaders.GameController;
@@ -13,14 +14,14 @@ public class Missile extends GameObject {
     @Override
     public void tickBehavior(GameController controller) {
         this.moveY(GameData.MISSILE_SPEED);
-        List<GameObject> entities = controller.getEntities();
+        List<GameObject> entities = new ArrayList<GameObject>(controller.getEntities());
         if(this.isOutOfBounds()) {
-            entities.remove(this);
+            controller.getEntities().remove(this);
         } else {
             for(GameObject entity : entities) {
                 if(entity instanceof Ship && this.intersects(entity)) {
                     controller.shipHit();
-                    entities.remove(this);
+                    controller.getEntities().remove(this);
                 }
             }
         }

@@ -37,6 +37,7 @@ public final class GameData {
     public static final int ALIEN_HEIGHT = 24;
     public static final int NUM_ALIENS_X = 11;
     public static final int NUM_ALIENS_Y = 5;
+    public static final int ALIEN_FIRE_RATE = 100;
 
     public static final int ALIEN_POINTS = 10;
     public static final int LEVEL_POINTS = 100;
