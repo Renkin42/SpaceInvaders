@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
@@ -60,10 +61,23 @@ public final class GameData {
             g.setColor(Color.RED);
             g.setStroke(new BasicStroke(spriteSize / 16));
             g.drawRect(spriteSize / 32, spriteSize / 32, spriteSize * 15 / 16, spriteSize * 15 / 16);
-            g.setFont(new Font(Font.MONOSPACED, Font.BOLD, spriteSize * 5 / 4));
-            g.drawString("?", spriteSize / 8, spriteSize * 7 / 8);
+            g.setFont(new Font(Font.SERIF, Font.BOLD, spriteSize * 5 / 4));
+            g.drawString("?", spriteSize * 3 / 16, spriteSize * 7 / 8);
         }
         return sprite;
+    }
+    
+    public static final Font getFont(String name, int style, int size) {
+        InputStream fontStream = GameData.class.getResourceAsStream("/assets/fonts/" + name + ".ttf");
+        Font newFont;
+        try {
+            newFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
+            newFont = newFont.deriveFont(style, size);
+        } catch (Exception e) {
+            System.err.println("Could not find font: " + name + ".ttf");
+            newFont = new Font(Font.SANS_SERIF, style, size);
+        }
+        return newFont;
     }
 
 }
