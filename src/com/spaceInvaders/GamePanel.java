@@ -25,6 +25,7 @@ public class GamePanel extends JPanel {
     private Font subTitleFont = GameData.getFont("xirod", Font.PLAIN, 16);
     private Font dataFont = GameData.getFont("neutronium", Font.PLAIN, 28);
     private Image backGroundImg = GameData.getSprite("space");
+    private Image failureImage = GameData.getSprite("sloppy");
 
     public GamePanel(GameController controller) {
         this.controller = controller;
@@ -44,8 +45,6 @@ public class GamePanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        g.setColor(Color.DARK_GRAY);
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
         g.drawImage(backGroundImg, 0, 0, this.getWidth(), this.getHeight(), null);
 
         if (controller.getGameState() == GameState.START) {
@@ -75,10 +74,12 @@ public class GamePanel extends JPanel {
                 g.fillRect(0, 0, this.getWidth(), this.getHeight());
                 g.setColor(Color.WHITE);
                 g.setFont(titleFont);
-                g.drawString("GAME OVER", GameData.GAME_BOARD_WIDTH / 2 - 150, GameData.GAME_BOARD_HEIGHT / 2);
+                g.drawString("GAME OVER", GameData.GAME_BOARD_WIDTH / 2 - 150, GameData.GAME_BOARD_HEIGHT / 2 - 150);
+                g.drawImage(failureImage, GameData.GAME_BOARD_WIDTH / 2 - 128, GameData.GAME_BOARD_HEIGHT / 2 - 128, 
+                        256, 256, null);
                 g.setFont(subTitleFont);
                 g.drawString("Press Space to start new game.", GameData.GAME_BOARD_WIDTH / 2 - 225,
-                        GameData.GAME_BOARD_HEIGHT / 2 + 35);
+                        GameData.GAME_BOARD_HEIGHT / 2 + 150);
             }
             String gameState = String.format("Lives: %d | Level: %02d | Score: %03d", controller.getLives(),
                     controller.getLevel(), controller.getScore());

@@ -162,6 +162,7 @@ public class GameController extends TimerTask implements KeyListener {
     
     public void gameOver() {
         this.state = GameState.GAME_OVER;
+        GameData.playSound("sloppy", 0);
     }
 
     @Override
