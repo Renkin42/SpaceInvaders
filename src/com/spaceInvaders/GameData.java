@@ -94,33 +94,19 @@ public final class GameData {
         return newFont;
     }
     
-    public static final void playSound(String name, float volume) {
+    public static Clip getSound(String name, float volume) {
+        Clip soundClip = null;
         try {
             URL soundURL = GameData.class.getResource("/assets/sounds/" + name + ".wav");
             AudioInputStream soundStream = AudioSystem.getAudioInputStream(soundURL);
-            Clip soundClip = AudioSystem.getClip();
+            soundClip = AudioSystem.getClip();
             soundClip.open(soundStream);
             FloatControl volumeControl = (FloatControl) soundClip.getControl(FloatControl.Type.MASTER_GAIN);
             volumeControl.setValue(volume);
-            soundClip.start();
         } catch (Exception e) {
             System.err.println("Audio file not found: " + name + ".wav");
         }
-    }
-    
-    public static final void loopSound(String name, float volume) {
-        try {
-            URL soundURL = GameData.class.getResource("/assets/sounds/" + name + ".wav");
-            AudioInputStream soundStream = AudioSystem.getAudioInputStream(soundURL);
-            Clip soundClip = AudioSystem.getClip();
-            soundClip.open(soundStream);
-            FloatControl volumeControl = (FloatControl) soundClip.getControl(FloatControl.Type.MASTER_GAIN);
-            volumeControl.setValue(volume);
-            soundClip.loop(Clip.LOOP_CONTINUOUSLY);;
-        } catch (Exception e) {
-            System.err.println("Audio file not found: " + name + ".wav");
-            //e.printStackTrace();
-        }
+        return soundClip;
     }
 
 }

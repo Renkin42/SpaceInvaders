@@ -3,8 +3,11 @@ package com.spaceInvaders;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimerTask;
+import javax.sound.sampled.Clip;
 
 import com.spaceInvaders.entities.Alien;
 import com.spaceInvaders.entities.Explosion;
@@ -26,11 +29,13 @@ public class GameController extends TimerTask implements KeyListener {
     private boolean missileOnScreen;
     private GameState state;
     private int lifeThreshHold;
+    private Map<String, Clip> sounds;
 
     public GameController() {
         state = GameState.START;
         entities = new ArrayList<GameObject>();
         gameArea = new GamePanel(this);
+        sounds = new HashMap<String, Clip>();
 
     }
     
@@ -155,14 +160,25 @@ public class GameController extends TimerTask implements KeyListener {
         return state;
     }
     
+    public void playSound(String name, float volume) {
+        if(sounds.containsKey(name)) {
+            sounds.get(name).stop();
+            sounds.get(name).setMicrosecondPosition(0);
+            sounds.get(name).start();
+        } else {
+            sounds.put(name, GameData.getSound(name, volume));
+            sounds.get(name).start();
+        }
+    }
+    
     public void createExplosion(int x, int y) {
         this.entities.add(new Explosion(x - GameData.EXPLOSION_SIZE, y - GameData.EXPLOSION_SIZE));
-        GameData.playSound("kerboom", -20);
+        playSound("kerboom", -20);
     }
     
     public void gameOver() {
         this.state = GameState.GAME_OVER;
-        GameData.playSound("sloppy", 0);
+        playSound("sloppy", 0);
     }
 
     @Override

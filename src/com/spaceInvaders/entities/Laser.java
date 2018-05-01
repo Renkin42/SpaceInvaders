@@ -16,7 +16,7 @@ public class Laser extends GameObject {
         this.moveY(-GameData.LASER_SPEED);
         List<GameObject> entities = new ArrayList<GameObject>(controller.getEntities());
         if (this.isOutOfBounds()) {
-            GameData.playSound("sploosh", -20);
+            controller.playSound("sploosh", -20);
             controller.getEntities().remove(this);
             controller.setLaserOnScreen(false);
         } else {
@@ -28,7 +28,7 @@ public class Laser extends GameObject {
                         controller.getEntities().remove(this);
                         controller.alienHit();
                     } else if (entity instanceof Missile) {
-                        GameData.playSound("kerboom", -20);
+                        controller.playSound("kerboom", -20);
                         controller.createExplosion(getX() + getWidth() / 2, getY());
                         controller.setLaserOnScreen(false);
                         controller.addPoints(5);

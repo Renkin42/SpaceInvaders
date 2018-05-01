@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
+import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 
 import com.spaceInvaders.entities.GameObject;
@@ -26,6 +27,7 @@ public class GamePanel extends JPanel {
     private Font dataFont = GameData.getFont("neutronium", Font.PLAIN, 28);
     private Image backGroundImg = GameData.getSprite("space");
     private Image failureImage = GameData.getSprite("sloppy");
+    private Clip bgMusic = GameData.getSound("twilight", -20);
 
     public GamePanel(GameController controller) {
         this.controller = controller;
@@ -40,7 +42,7 @@ public class GamePanel extends JPanel {
     public void addNotify() {
         super.addNotify();
         this.requestFocus();
-        GameData.loopSound("twilight", -20);
+        bgMusic.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     @Override
