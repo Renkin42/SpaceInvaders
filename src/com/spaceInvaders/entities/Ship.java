@@ -20,19 +20,20 @@ public class Ship extends GameObject implements Shooter<Laser> {
     @Override
     public void tickBehavior(GameController controller) {
         if(controller.isLeftPressed()) {
-            this.moveX(-10);
+            this.moveX(-GameData.SHIP_SPEED);
             if(this.isOutOfBounds()) {
-                this.moveX(10);
+                this.moveX(GameData.SHIP_SPEED);
             }
         }
         if(controller.isRightPressed()) {
-            this.moveX(10);
+            this.moveX(GameData.SHIP_SPEED);
             if(this.isOutOfBounds()) {
-                this.moveX(-10);
+                this.moveX(-GameData.SHIP_SPEED);
             }
         }
         if(controller.isFirePressed() && !controller.isLaserOnScreen()) {
             controller.getEntities().add(this.fire());
+            GameData.playSound("laser", -20);
             controller.setLaserOnScreen(true);
         }
     }

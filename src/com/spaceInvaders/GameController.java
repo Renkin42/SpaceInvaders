@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.TimerTask;
 
 import com.spaceInvaders.entities.Alien;
+import com.spaceInvaders.entities.Explosion;
 import com.spaceInvaders.entities.GameObject;
 import com.spaceInvaders.entities.Ship;
 
@@ -24,6 +25,7 @@ public class GameController extends TimerTask implements KeyListener {
     private boolean laserOnScreen;
     private boolean missileOnScreen;
     private GameState state;
+    private int lifeThreshHold;
 
     public GameController() {
         state = GameState.START;
@@ -31,20 +33,26 @@ public class GameController extends TimerTask implements KeyListener {
         gameArea = new GamePanel(this);
 
     }
-
-    public void newGame() {
+    
+    public void setPlayField() {
         entities.clear();
-        score = 0;
-        level = 1;
-        lives = 3;
         numAliens = GameData.NUM_ALIENS_X * GameData.NUM_ALIENS_Y;
         entities.add(new Ship());
         for (int y = 0; y < GameData.NUM_ALIENS_Y; y++) {
             for (int x = 0; x < GameData.NUM_ALIENS_X; x++) {
                 entities.add(new Alien(GameData.ALIEN_WIDTH * 5 / 4 * x + GameData.ALIEN_WIDTH / 4,
-                        GameData.ALIEN_HEIGHT * y * 9 / 8 + 30));
+                        GameData.ALIEN_HEIGHT * y * 9 / 8 + 30, level));
             }
         }
+        state = GameState.RUNNING;
+    }
+
+    public void newGame() {
+        score = 0;
+        level = 1;
+        lives = GameData.START_LIVES;
+        lifeThreshHold = 1000;
+        setPlayField();
         state = GameState.RUNNING;
     }
 
@@ -86,6 +94,10 @@ public class GameController extends TimerTask implements KeyListener {
 
     public void addPoints(int points) {
         score += points;
+        if(score >= lifeThreshHold) {
+            lives++;
+            lifeThreshHold += 1000;
+        }
     }
 
     public void resetPoints() {
@@ -98,14 +110,8 @@ public class GameController extends TimerTask implements KeyListener {
 
     public void nextLevel() {
         level++;
-        score += 100;
-        numAliens = GameData.NUM_ALIENS_X * GameData.NUM_ALIENS_Y;
-        for (int y = 0; y < GameData.NUM_ALIENS_Y; y++) {
-            for (int x = 0; x < GameData.NUM_ALIENS_X; x++) {
-                entities.add(new Alien(GameData.ALIEN_WIDTH * 5 / 4 * x + GameData.ALIEN_WIDTH / 4,
-                        GameData.ALIEN_HEIGHT * y * 9 / 8 + 30));
-            }
-        }
+        addPoints(100);
+        setPlayField();
     }
 
     public void resetLevel() {
@@ -117,7 +123,11 @@ public class GameController extends TimerTask implements KeyListener {
     }
 
     public void shipHit() {
-        lives--;
+        if(lives == 0) {
+            gameOver();
+        } else {
+            lives--;
+        }
     }
 
     public void resetLives() {
@@ -130,7 +140,7 @@ public class GameController extends TimerTask implements KeyListener {
 
     public void alienHit() {
         numAliens--;
-        score += 10;
+        addPoints(10);
         laserOnScreen = false;
         if (numAliens == 0) {
             nextLevel();
@@ -143,6 +153,15 @@ public class GameController extends TimerTask implements KeyListener {
 
     public GameState getGameState() {
         return state;
+    }
+    
+    public void createExplosion(int x, int y) {
+        this.entities.add(new Explosion(x - GameData.EXPLOSION_SIZE, y - GameData.EXPLOSION_SIZE));
+        GameData.playSound("kerboom", -20);
+    }
+    
+    public void gameOver() {
+        this.state = GameState.GAME_OVER;
     }
 
     @Override

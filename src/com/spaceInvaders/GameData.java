@@ -6,9 +6,16 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * Holds some constants for the game in a single location for easy access and
@@ -17,30 +24,36 @@ import javax.imageio.ImageIO;
 public final class GameData {
 
     /** Width of a laser fired by player's ship. */
-    public static final int LASER_WIDTH = 2;
+    public static final int LASER_WIDTH = 4;
     /** Height of a laser fired by player's ship. */
     public static final int LASER_HEIGHT = 16;
     /** How far a laser moves in a single step. */
-    public static final int LASER_SPEED = 30;
+    public static final int LASER_SPEED = 15;
 
     /** Width of a missile fired by an alien. */
-    public static final int MISSILE_WIDTH = 5;
+    public static final int MISSILE_WIDTH = 12;
     /** Height of a missile fired by an alien. */
-    public static final int MISSILE_HEIGHT = 20;
+    public static final int MISSILE_HEIGHT = 32;
     /** How far a missile moves in a single step. */
-    public static final int MISSILE_SPEED = 8;
+    public static final int MISSILE_SPEED = 2;
 
     public static final int SHIP_WIDTH = 40;
     public static final int SHIP_HEIGHT = 64;
+    public static final int SHIP_SPEED = 4;
 
     public static final int ALIEN_WIDTH = 32;
     public static final int ALIEN_HEIGHT = 24;
     public static final int NUM_ALIENS_X = 11;
     public static final int NUM_ALIENS_Y = 5;
-    public static final int ALIEN_FIRE_RATE = 100;
+    public static final int ALIEN_FIRE_RATE = 8;
+    
+    public static final int EXPLOSION_SIZE = 32;
+    public static final int EXPLOSION_DURATION = 20;
 
     public static final int ALIEN_POINTS = 10;
     public static final int LEVEL_POINTS = 100;
+    
+    public static final int START_LIVES = 5;
 
     /** Width of game area. */
     public static final int GAME_BOARD_WIDTH = 600;
@@ -79,6 +92,35 @@ public final class GameData {
             newFont = new Font(Font.SANS_SERIF, style, size);
         }
         return newFont;
+    }
+    
+    public static final void playSound(String name, float volume) {
+        try {
+            URL soundURL = GameData.class.getResource("/assets/sounds/" + name + ".wav");
+            AudioInputStream soundStream = AudioSystem.getAudioInputStream(soundURL);
+            Clip soundClip = AudioSystem.getClip();
+            soundClip.open(soundStream);
+            FloatControl volumeControl = (FloatControl) soundClip.getControl(FloatControl.Type.MASTER_GAIN);
+            volumeControl.setValue(volume);
+            soundClip.start();
+        } catch (Exception e) {
+            System.err.println("Audio file not found: " + name + ".wav");
+        }
+    }
+    
+    public static final void loopSound(String name, float volume) {
+        try {
+            URL soundURL = GameData.class.getResource("/assets/sounds/" + name + ".wav");
+            AudioInputStream soundStream = AudioSystem.getAudioInputStream(soundURL);
+            Clip soundClip = AudioSystem.getClip();
+            soundClip.open(soundStream);
+            FloatControl volumeControl = (FloatControl) soundClip.getControl(FloatControl.Type.MASTER_GAIN);
+            volumeControl.setValue(volume);
+            soundClip.loop(Clip.LOOP_CONTINUOUSLY);;
+        } catch (Exception e) {
+            System.err.println("Audio file not found: " + name + ".wav");
+            //e.printStackTrace();
+        }
     }
 
 }

@@ -21,6 +21,7 @@ public class Missile extends GameObject {
             for(GameObject entity : entities) {
                 if(entity instanceof Ship && this.intersects(entity)) {
                     controller.shipHit();
+                    controller.createExplosion(getX() + getWidth() / 2, getY() + getHeight());
                     controller.getEntities().remove(this);
                 }
             }
