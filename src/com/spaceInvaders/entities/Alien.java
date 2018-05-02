@@ -68,8 +68,8 @@ public class Alien extends GameObject implements Shooter<Missile> {
                     }
                 }
                 if (frontClear && shipInFront) {
-                    controller.getEntities().add(this.fire());
                     controller.playSound("rocket", -20);
+                    controller.getEntities().add(this.fire());
                 }
 
             }

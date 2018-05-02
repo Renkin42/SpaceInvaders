@@ -32,8 +32,8 @@ public class Ship extends GameObject implements Shooter<Laser> {
             }
         }
         if(controller.isFirePressed() && !controller.isLaserOnScreen()) {
-            controller.getEntities().add(this.fire());
             controller.playSound("laser", -20);
+            controller.getEntities().add(this.fire());
             controller.setLaserOnScreen(true);
         }
     }

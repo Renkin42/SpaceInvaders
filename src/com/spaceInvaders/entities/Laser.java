@@ -6,7 +6,7 @@ import com.spaceInvaders.GameController;
 import com.spaceInvaders.GameData;
 
 public class Laser extends GameObject {
-
+    
     public Laser(int startX, int startY) {
         super(startX, startY, GameData.LASER_WIDTH, GameData.LASER_HEIGHT, GameData.getSprite("laser"));
     }
@@ -16,7 +16,7 @@ public class Laser extends GameObject {
         this.moveY(-GameData.LASER_SPEED);
         List<GameObject> entities = new ArrayList<GameObject>(controller.getEntities());
         if (this.isOutOfBounds()) {
-            controller.playSound("sploosh", -20);
+            controller.playSound("sploosh",  -20);
             controller.getEntities().remove(this);
             controller.setLaserOnScreen(false);
         } else {
@@ -24,19 +24,24 @@ public class Laser extends GameObject {
                 if (this.intersects(entity)) {
                     if (entity instanceof Alien) {
                         controller.createExplosion(getX() + getWidth() / 2, getY());
-                        controller.getEntities().remove(entity);
-                        controller.getEntities().remove(this);
+                        entity.destroy(controller);
+                        this.destroy(controller);
                         controller.alienHit();
                     } else if (entity instanceof Missile) {
-                        controller.playSound("kerboom", -20);
-                        controller.createExplosion(getX() + getWidth() / 2, getY());
+                        controller.createExplosion(getX() + getWidth() / 2, getY());;
                         controller.setLaserOnScreen(false);
                         controller.addPoints(5);
-                        controller.getEntities().remove(entity);
-                        controller.getEntities().remove(this);
+                        entity.destroy(controller);
+                        this.destroy(controller);
                     }
                 }
             }
         }
+    }
+    
+    @Override
+    public void destroy(GameController controller) {
+        controller.setLaserOnScreen(false);
+        super.destroy(controller);
     }
 }

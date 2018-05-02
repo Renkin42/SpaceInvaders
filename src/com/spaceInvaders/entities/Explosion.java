@@ -1,4 +1,5 @@
 package com.spaceInvaders.entities;
+
 import com.spaceInvaders.GameController;
 import com.spaceInvaders.GameData;
 
@@ -14,7 +15,7 @@ public class Explosion extends GameObject {
     public void tickBehavior(GameController controller) {
         tickCounter++;
         if(tickCounter == GameData.EXPLOSION_DURATION) {
-            controller.getEntities().remove(this);
+            this.destroy(controller);
         }
 
     }

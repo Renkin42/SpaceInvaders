@@ -26,7 +26,6 @@ public class GameController extends TimerTask implements KeyListener {
     private boolean rightPressed;
     private boolean firePressed;
     private boolean laserOnScreen;
-    private boolean missileOnScreen;
     private GameState state;
     private int lifeThreshHold;
     private Map<String, Clip> sounds;
@@ -40,7 +39,10 @@ public class GameController extends TimerTask implements KeyListener {
     }
     
     public void setPlayField() {
-        entities.clear();
+        List<GameObject> entitiesTemp = new ArrayList<GameObject>(entities);
+        for(GameObject entity : entitiesTemp) {
+            entity.destroy(this);
+        }
         numAliens = GameData.NUM_ALIENS_X * GameData.NUM_ALIENS_Y;
         entities.add(new Ship());
         for (int y = 0; y < GameData.NUM_ALIENS_Y; y++) {
@@ -85,14 +87,6 @@ public class GameController extends TimerTask implements KeyListener {
         this.laserOnScreen = laserOnScreen;
     }
 
-    public boolean isMissileOnScreen() {
-        return missileOnScreen;
-    }
-
-    public void setMissileOnScreen(boolean missileOnScreen) {
-        this.missileOnScreen = missileOnScreen;
-    }
-
     public int getScore() {
         return score;
     }
@@ -105,10 +99,6 @@ public class GameController extends TimerTask implements KeyListener {
         }
     }
 
-    public void resetPoints() {
-        score = 0;
-    }
-
     public int getLevel() {
         return level;
     }
@@ -117,10 +107,6 @@ public class GameController extends TimerTask implements KeyListener {
         level++;
         addPoints(100);
         setPlayField();
-    }
-
-    public void resetLevel() {
-        level = 1;
     }
 
     public int getLives() {
@@ -135,10 +121,6 @@ public class GameController extends TimerTask implements KeyListener {
         }
     }
 
-    public void resetLives() {
-        lives = 3;
-    }
-
     public int getNumAliens() {
         return numAliens;
     }
@@ -146,9 +128,25 @@ public class GameController extends TimerTask implements KeyListener {
     public void alienHit() {
         numAliens--;
         addPoints(10);
-        laserOnScreen = false;
         if (numAliens == 0) {
             nextLevel();
+        }
+    }
+    
+    public void createExplosion(int x, int y) {
+        entities.add(new Explosion(x - GameData.EXPLOSION_SIZE / 2, y - GameData.EXPLOSION_SIZE / 2));
+        playSound("kerboom", -20);
+    }
+    
+    public void playSound(String name, float volume) {
+        if(sounds.containsKey(name)) {
+            Clip sound = sounds.get(name);
+            sound.stop();
+            sound.setMicrosecondPosition(-sound.getMicrosecondPosition());
+            sound.start();
+        } else {
+            sounds.put(name, GameData.getSound(name, volume));
+            sounds.get(name).start();
         }
     }
 
@@ -158,22 +156,6 @@ public class GameController extends TimerTask implements KeyListener {
 
     public GameState getGameState() {
         return state;
-    }
-    
-    public void playSound(String name, float volume) {
-        if(sounds.containsKey(name)) {
-            sounds.get(name).stop();
-            sounds.get(name).setMicrosecondPosition(0);
-            sounds.get(name).start();
-        } else {
-            sounds.put(name, GameData.getSound(name, volume));
-            sounds.get(name).start();
-        }
-    }
-    
-    public void createExplosion(int x, int y) {
-        this.entities.add(new Explosion(x - GameData.EXPLOSION_SIZE, y - GameData.EXPLOSION_SIZE));
-        playSound("kerboom", -20);
     }
     
     public void gameOver() {
@@ -237,8 +219,6 @@ public class GameController extends TimerTask implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent ke) {
-
-    }
+    public void keyTyped(KeyEvent ke) { }
 
 }

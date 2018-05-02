@@ -16,13 +16,13 @@ public class Missile extends GameObject {
         this.moveY(GameData.MISSILE_SPEED);
         List<GameObject> entities = new ArrayList<GameObject>(controller.getEntities());
         if(this.isOutOfBounds()) {
-            controller.getEntities().remove(this);
+            this.destroy(controller);
         } else {
             for(GameObject entity : entities) {
                 if(entity instanceof Ship && this.intersects(entity)) {
                     controller.shipHit();
                     controller.createExplosion(getX() + getWidth() / 2, getY() + getHeight());
-                    controller.getEntities().remove(this);
+                    this.destroy(controller);
                 }
             }
         }

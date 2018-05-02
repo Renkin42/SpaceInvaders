@@ -83,6 +83,10 @@ public abstract class GameObject implements Object2D {
     public void drawSprite(Graphics g) {
         g.drawImage(sprite, posX, posY, width, height, null);
     }
+    
+    public void destroy(GameController controller) {
+        controller.getEntities().remove(this);
+    }
 
     public abstract void tickBehavior(GameController controller);
 
